@@ -11,6 +11,9 @@ Dist::Zilla::Plugin::Run::BeforeBuild
 Dist::Zilla::PluginBundle::Filter
 Dist::Zilla::Plugin::Git::NextVersion
 
+LCDd model generation also requires:
+Config::Model::Itself
+
 On debian or ubuntu, do:
 
 sudo aptitude install \
@@ -18,7 +21,8 @@ sudo aptitude install \
      libdist-zilla-plugin-run-perl \
      libdist-zilla-plugins-cjm-perl \
      libdist-zilla-perl \
-     libdist-zilla-plugin-podspellingtests-perl
+     libdist-zilla-plugin-podspellingtests-perl \
+	 libconfig-model-itself-perl
 
 Then run:
 
