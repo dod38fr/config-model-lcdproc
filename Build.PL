@@ -30,20 +30,16 @@ my $build = $class->new(
     module_name => 'Config::Model::LcdProc',
     @version_info,
     license       => 'lgpl',
+    appli_files   => \%appli_files,
     dist_abstract => 'configuration editor for lcdproc',
     dist_author   => 'Dominique Dumont (ddumont at cpan dot org)',
 
-    # Build.PL runs gen_class_pod.pl which loads Config::Model from lib,
-    # hence most of the runtime dependencies are in fact 
-    # configure_requires. This should improve Perl smoke tests.
-
 ##{ $plugin->get_prereqs ##}
 
-    # cleanup required by t/auto_read.t
-    # PreGrammar.pm is created by t/value_computer.t
-    add_to_cleanup => [ qw/PreGrammar.pm wr_root r_root/ ],
+    add_to_cleanup => [ qw/wr_root/ ],
 );
 
 $build->add_build_element('pl');
+$build->add_build_element('appli');
 
 $build->create_build_script;
