@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+2013-06-15 - 0.001
+
+    * imported LCDd.conf from lcdproc 0.5.6
+    * LCDd.conf: removed extra comment that trips model generation
+
 2013-05-25 - 2.036
 
-See Config::Model Changes for older logs
+    See Config::Model Changes for older logs
