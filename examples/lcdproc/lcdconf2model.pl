@@ -8,11 +8,14 @@ use warnings;
 
 # How does this work ?
 
-# The convention used in LCDd.conf template file are written in a way which
-# makes it relatively easy to parse to get all required information to build a model.
-# All drivers are listed, most parameters have default values and legal values
-# written in comments in a uniform way. Hence this file (and comments) can be parsed
-# to retrieve information required for the model.
+# The conventions used in LCDd.conf template file are written in a way
+# which makes it relatively easy to parse to get all required
+# information to build a model.
+
+# All drivers are listed, most parameters have default values and
+# legal values written in comments in a uniform way. Hence this file
+# (and comments) can be parsed to retrieve the information required to
+# create a consistent model for LcdProc configuration.
 
 # This script performs 3 tasks:
 # 1/ parse LCDd.conf template
@@ -76,7 +79,7 @@ $model->create_config_class(
 # Store any INI class, and use Dummy::Class to hold parameters. 
 
 # Note that a INI backend could be created here. But, some useful
-# parameters are commented out in LCD.conf. Some some processing is
+# parameters are commented out in LCD.conf. So some processing is
 # required to be able to create a model with these commented parameters.
 # See below for this processing.
 
@@ -101,6 +104,8 @@ my @lines    = $lcd_file->getlines;
 
 # un-comment commented parameters
 foreach (@lines) { s/^#(\w+=)/$1/ }
+
+# pre-processing is done.
 
 # store the munged LCDd.conf in a IO::Handle usable by INI backend
 my $ioh = IO::String->new( join( '', @lines ) );
