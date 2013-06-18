@@ -1,7 +1,5 @@
 package Config::Model::LcdProc;
 
-our $VERSION='2.038';
-
 1;
 
 =pod
