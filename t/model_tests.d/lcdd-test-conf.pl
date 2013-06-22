@@ -27,6 +27,15 @@ push @fix_warnings,
             # qr/value 2 > max limit 0/ => 'fs:"/var/chroot/lenny-i386/dev" fs_passno=0' ,
         ],
     },
+    {   #test upgrade from raw lcdproc 0.5.5
+        name => 'LDCd-0.5.5',
+        load_check => 'skip'
+    },
+    {   # likewise for lcdproc 0.5.6
+        name => 'LDCd-0.5.6',
+        load_check => 'skip'
+    },
+    
 );
 
 1;
