@@ -243,13 +243,11 @@ $dispatch{"LCDd::server"}{WaitTime} = $dispatch{"LCDd::server"}{ReportLevel} =
 # special dispatch case
 my %override ;
 
-# ensure that default values are "Hello LCDproc" (or "GoodBye LCDproc")
+# Handle display content
 $override{"LCDd::server"}{GoodBye} = $override{"LCDd::server"}{Hello} = sub {
     my ( $class, $elt ) = @_;
     my $ret = qq( class:"$class" element:$elt type=list ) ;
-    $ret .= 'cargo type=leaf value_type=uniline - ' ;  
-    $ret .= 'default_with_init:0="\"    '.$elt.'\"" ' ; 
-    $ret .= 'default_with_init:1="\"    LCDproc!\""'; 
+    $ret .= 'cargo type=leaf value_type=uniline';
     return $ret ;
 };
 
