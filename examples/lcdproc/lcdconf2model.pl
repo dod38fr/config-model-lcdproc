@@ -228,6 +228,11 @@ $dispatch{"LCDd::server"}{Driver} = sub {
     return $load;
 };
 
+# Ensure that DriverPath will end with a slash
+$dispatch{"LCDd::server"}{DriverPath} = sub {
+    return $dispatch{_default_}->( @_ ) . q! match="/$"! ;
+};
+
 # like default but ensure that parameter is integer
 $dispatch{"LCDd::server"}{WaitTime} = $dispatch{"LCDd::server"}{ReportLevel} =
  $dispatch{"LCDd::picolcd"}{LircFlushThreshold} = $dispatch{"LCDd::server"}{Port}   = sub {
