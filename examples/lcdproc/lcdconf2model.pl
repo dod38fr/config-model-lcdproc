@@ -102,8 +102,8 @@ my @lines    = $lcd_file->getlines;
 
 # Here's the LCDd.conf pre-processing mentioned above
 
-# un-comment commented parameters
-foreach (@lines) { s/^#(\w+=)/$1/ }
+# un-comment commented parameters and put value as default value
+foreach (@lines) { s/^#(\w+)=(.*)/# [default: $2]\n$1=$2/ }
 
 # pre-processing is done.
 
