@@ -1,5 +1,20 @@
 {{$NEXT}}
 
+2013-09-22 - 2.040
+
+    * LCDd.conf v0.5.6 patches:
+	  * Specify yes/no as legal values for Foreground (so it becomes a boolean)
+      * specify ReportLevel default value is square brackets
+
+    * LCDd model generator:
+      * yes,no values are now boolean (requires Config::Model 2.043)
+      * ignore default value from file when square brackets are specified
+      * don't initialise Hello and GoodBye arrays
+      * default value mentioned in square brackets are used as upstream_default
+      * tweak model to ensure that DriverPath will end with a slash
+
+    * test upgrade from original lcdproc config file with 0.5.5 and 0.5.6
+
 2013-06-19 - 2.039
 
     * model_test.t: avoid warnings in smoke tests
