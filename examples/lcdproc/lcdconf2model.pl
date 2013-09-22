@@ -357,29 +357,26 @@ sub info_to_model {
 
     # use this semantic information to better specify the parameter
     my $legal = delete $info{legal} || '';
-    given ($legal) {
-        when (/^(\d+)-(\d+)$/) { push @model, "value_type=integer min=$1 max=$2"}
-        when (/^(yes,no|no,yes)$/)   { push @model, "value_type=boolean write_as=no,yes"; say "bool found"}
-        when (/^([\w\,]+)$/)   { push @model, "value_type=enum choice=$1"}
-        default                { push @model, "value_type=$value_type"}
-    }
+    push @model,
+      $legal =~ /^(\d+)-(\d+)$/     ? "value_type=integer min=$1 max=$2"
+    : $legal =~ /^(yes,no|no,yes)$/ ? "value_type=boolean write_as=no,yes"
+    : $legal =~ /^([\w\,]+)$/       ? "value_type=enum    choice=$1"
+    :                                 "value_type=$value_type" ;
 
     foreach my $k (keys %info) {
         my $v = $info{$k} ;
         die "Undefined value. Something is wrong in info '$info'" unless defined $v ;
         $v = '"'.$v.'"' unless $v=~/^"/ ;
 
-        given ($k) {
-            when (/default/ ) {
-                # specify upstream default value if it was found in the comment
-                push @model ,qq!upstream_default=$v! if length($v);
-            }
-            when (/assert/ ) {
-                push @model ,qq!warn_unless:0 code=$v -!;
-            }
-            default {
-                push @model, "$k=$v" ;
-            }
+        if ($k =~ /default/ ) {
+            # specify upstream default value if it was found in the comment
+            push @model ,qq!upstream_default=$v! if length($v);
+        }
+        elsif ($k =~ /assert/ ) {
+            push @model ,qq!warn_unless:0 code=$v -!;
+        }
+        else {
+            push @model, "$k=$v" ;
         }
     }
 
