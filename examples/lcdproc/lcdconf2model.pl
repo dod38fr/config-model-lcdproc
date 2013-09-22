@@ -359,6 +359,7 @@ sub info_to_model {
     my $legal = delete $info{legal} || '';
     given ($legal) {
         when (/^(\d+)-(\d+)$/) { push @model, "value_type=integer min=$1 max=$2"}
+        when (/^(yes,no|no,yes)$/)   { push @model, "value_type=boolean write_as=no,yes"; say "bool found"}
         when (/^([\w\,]+)$/)   { push @model, "value_type=enum choice=$1"}
         default                { push @model, "value_type=$value_type"}
     }
