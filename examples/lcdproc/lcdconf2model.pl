@@ -186,7 +186,7 @@ $dispatch{_default_} = sub {
     my $square_model = '';
     
     my $square_rexp = '\[(\s*\w+\s*:[^\]]*)\]';
-    while ($$info_r =~ /$square_rexp/ ) {
+    if ($$info_r =~ /$square_rexp/ ) {
         my $info = $1 ;
         say "class $ini_class element $ini_param info: '$info'" if $verbose;
         $$info_r =~ s/$square_rexp//;
