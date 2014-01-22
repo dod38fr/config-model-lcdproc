@@ -359,6 +359,7 @@ sub info_to_model {
     my $legal = delete $info{legal} || '';
     push @model,
       $legal =~ /^(\d+)-(\d+)$/     ? "value_type=integer min=$1 max=$2"
+    : $legal =~ /^(on,off|off,on)$/ ? "value_type=boolean write_as=off,on"
     : $legal =~ /^(yes,no|no,yes)$/ ? "value_type=boolean write_as=no,yes"
     : $legal =~ /^([\w\,]+)$/       ? "value_type=enum    choice=$1"
     :                                 "value_type=$value_type" ;
