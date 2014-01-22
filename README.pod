@@ -27,4 +27,4 @@ C<-force> option.
 
 =head2 Installation from git
 
-See README.install_from_git file
+See README.build-from-git file
