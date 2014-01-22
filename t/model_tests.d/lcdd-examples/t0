@@ -5,6 +5,7 @@
 DriverPath=/usr/lib/lcdproc/
 
 Driver=curses
+AutoRotate=no
 
 # Tells the driver to bind to the given interface
 Bind=127.0.0.1

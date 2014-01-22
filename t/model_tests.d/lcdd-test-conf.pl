@@ -19,6 +19,7 @@ push @fix_warnings,
        'server Hello:1',           qq("   LCDproc et Config::Model!") ,
        'server Driver', 'curses',
        'curses Size', '20x2',
+       'server AutoRotate', 'off',
      },
      @fix_warnings ,
      errors => [ 
