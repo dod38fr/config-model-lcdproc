@@ -1,5 +1,14 @@
 {{$NEXT}}
 
+2.041 2014-01-24
+
+    * require perl 5.10 (like Config::Model)
+
+    * LCDd model generator:
+      * off,on values are now boolean. cme will be more tolerant on
+        input values (e.g. 'no' will be converted to 'off')
+      * removed [.*] from generated doc of LCDd configuration elements
+
 2.040 2013-09-22
 
     * LCDd.conf v0.5.6 patches:
