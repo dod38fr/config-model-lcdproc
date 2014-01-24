@@ -1,6 +1,6 @@
 {{$NEXT}}
 
-2013-09-22 - 2.040
+2.040 2013-09-22
 
     * LCDd.conf v0.5.6 patches:
 	  * Specify yes/no as legal values for Foreground (so it becomes a boolean)
@@ -15,14 +15,14 @@
 
     * test upgrade from original lcdproc config file with 0.5.5 and 0.5.6
 
-2013-06-19 - 2.039
+2.039 2013-06-19
 
     * model_test.t: avoid warnings in smoke tests
     * updated doc
     * model generator: fixed comments
     * model generator: updated (c) years
 
-2013-06-15 - 0.001
+0.001 2013-06-15
 
     * imported LCDd.conf from lcdproc 0.5.6
     * LCDd.conf: removed extra comment that trips model generation
