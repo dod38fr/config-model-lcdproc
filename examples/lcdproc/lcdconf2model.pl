@@ -190,7 +190,7 @@ $dispatch{_default_} = sub {
         my $info = $1 ;
         say "class $ini_class element $ini_param info: '$info'" if $verbose;
         $$info_r =~ s/$square_rexp//g; # remove all remaining square_rexp
-        $square_model .= ' '. info_to_model($info,$value_type) ;
+        $square_model .= ' '. info_to_model($info,$value_type, $info_r) ;
     }
     
     unless ($square_model) {
@@ -347,7 +347,7 @@ say "Done";
 
 # this function extracts info specified between square brackets and returns a model snippet
 sub info_to_model {
-    my ($info,$value_type) = @_ ;
+    my ($info,$value_type, $info_r) = @_ ;
 
     $info =~ s/\s+//g;
     my @model ;
@@ -356,13 +356,34 @@ sub info_to_model {
     my %info = map { split /[:=]/,$_ ,2 ; } split /;/,$info ; 
 
     # use this semantic information to better specify the parameter
-    my $legal = delete $info{legal} || '';
-    push @model,
-      $legal =~ /^(\d+)-(\d+)$/     ? "value_type=integer min=$1 max=$2"
-    : $legal =~ /^(on,off|off,on)$/ ? "value_type=boolean write_as=off,on"
-    : $legal =~ /^(yes,no|no,yes)$/ ? "value_type=boolean write_as=no,yes"
-    : $legal =~ /^([\w\,]+)$/       ? "value_type=enum    choice=$1"
-    :                                 "value_type=$value_type" ;
+    if (my $legal = delete $info{legal} || '') {
+        if ( $legal =~ /^([\d.]*)-([\d.]*)$/ or $legal =~ /^>([\d.]+)$/ ) {
+            my $bounds = '';
+            $bounds.= "min=$1 " if defined $1;
+            $bounds.= "max=$2 " if defined $2;
+            my $vt = "value_type=";
+            $vt .= $bounds =~ m/\./ ? 'number ' : 'integer ';
+            push @model, $vt.$bounds;
+        }
+        elsif ($legal =~ /^(on,off|off,on)$/ ) {
+            push @model, "value_type=boolean write_as=off,on"
+        }
+        elsif ($legal =~ /^(yes,no|no,yes)$/ ) {
+            push @model, "value_type=boolean write_as=no,yes"
+        }
+        elsif ($legal =~ /^([\w\,]+)$/       ) {
+            push @model, "value_type=enum choice=$1"
+        }
+        else{
+            say "unhandled legal $legal ($$info_r)";
+            push @model, "value_type=$value_type ";
+            $$info_r .= "legal: $legal "
+        }
+        # push back $legal info if no model snippet could be extracted
+    }
+    else {
+        push @model, "value_type=$value_type ";
+    } ;
 
     foreach my $k (keys %info) {
         my $v = $info{$k} ;
