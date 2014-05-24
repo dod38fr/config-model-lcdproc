@@ -375,7 +375,7 @@ sub info_to_model {
             push @model, "value_type=enum choice=$1"
         }
         else{
-            say "unhandled legal $legal ($$info_r)";
+            say "note: unhandled legal  spec: '$legal'. Sending is back to doc";
             push @model, "value_type=$value_type ";
             $$info_r .= "legal: $legal "
         }
