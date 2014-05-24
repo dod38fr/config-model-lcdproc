@@ -25,7 +25,7 @@ use warnings;
 # 3/ Write the resulting LCDd model
 
 use Config::Model;
-use Config::Model::Itself ;    # to create the model
+use Config::Model::Itself 1.240;    # to create the model
 use Config::Model::Backend::IniFile;
 
 use 5.010;
