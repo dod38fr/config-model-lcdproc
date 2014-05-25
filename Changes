@@ -1,5 +1,17 @@
 {{$NEXT}}
 
+2.042 2014-05-25
+
+    The lcdproc model of this release is made for ldcproc 0.5.7. Only a very
+    small modification of LCDd.conf comments was required to be able to
+    generate a complete lcdproc model from LCDd.conf.
+
+    Changes:
+    * Build.PL: run script/gen_LCDd_model.pl at build time
+    * AnyEvent is no longer needed in tests
+    * LCDd.conf: modified comment to avoid Device being interpreted as list ...
+    * lcdconf2model: improved parsing of legal spec from LCDd.conf comments
+
 2.041 2014-01-24
 
     * require perl 5.10 (like Config::Model)
