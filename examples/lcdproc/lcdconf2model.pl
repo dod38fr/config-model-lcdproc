@@ -38,6 +38,8 @@ use Log::Log4perl qw(:easy);
 my $log4perl_user_conf_file = $ENV{HOME} . '/.log4config-model';
 Log::Log4perl::init($log4perl_user_conf_file);
 
+say "Building lcdproc model from upstream LCDd.conf file..." ;
+
 my $verbose = 0;
 my $show_model = 0;
 my $result = GetOptions ("verbose"  => \$verbose,
@@ -375,7 +377,7 @@ sub info_to_model {
             push @model, "value_type=enum choice=$1"
         }
         else{
-            say "note: unhandled legal  spec: '$legal'. Sending is back to doc";
+            say "note: unhandled legal  spec: '$legal'. Sending it back to doc";
             push @model, "value_type=$value_type ";
             $$info_r .= "legal: $legal "
         }
