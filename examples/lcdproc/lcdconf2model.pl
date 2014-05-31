@@ -199,7 +199,8 @@ $dispatch{_default_} = sub {
         # or use the value found in INI file as default
         $ini_v =~ s/^"//g;
         $ini_v =~ s/"$//g;
-        $square_model .= qq! value_type=$value_type default="$ini_v"! if length($ini_v);
+        $square_model .= qq! value_type=$value_type!;
+        $square_model .= qq! default="$ini_v"! if length($ini_v);
     }
 
     # get model information from comment (written between curly brackets)
