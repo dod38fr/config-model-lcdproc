@@ -188,10 +188,10 @@ $dispatch{_default_} = sub {
     my $square_model = '';
     
     my $square_rexp = '\[(\s*\w+\s*:[^\]]*)\]';
-    if ($$info_r =~ /$square_rexp/ ) {
+    if ($$info_r =~ /$square_rexp/s) {
         my $info = $1 ;
         say "class $ini_class element $ini_param info: '$info'" if $verbose;
-        $$info_r =~ s/$square_rexp//g; # remove all remaining square_rexp
+        $$info_r =~ s/$square_rexp//gs; # remove all remaining square_rexp
         $square_model .= ' '. info_to_model($info,$value_type, $info_r) ;
     }
     
