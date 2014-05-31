@@ -205,17 +205,17 @@ $dispatch{_default_} = sub {
 
     # get model information from comment (written between curly brackets)
     my $curly_model = '';
-    my $curly_rexp = '{(\s*\w+.*)}' ;
-    while ($$info_r =~ /$curly_rexp/) { 
-        my $model_snippet = $1 ;
-        say "class $ini_class element $ini_param model snippet: '$model_snippet'"
+    my $curly_rexp = '{%(\s*\w+.*?)%}' ;
+    while ($$info_r =~ /$curly_rexp/s) {
+        $curly_model = $1 ;
+        say "class $ini_class element $ini_param model snippet: '$curly_model'"
             if $verbose;
-        $$info_r =~ s/$curly_rexp//;
-        $load .= ' '. $model_snippet ;
+        $$info_r =~ s/$curly_rexp//s;
     }
     
     # return a string containing model specifications
-    return $load.$square_model;
+    # spec in curly model may override spec in square model
+    return $load . $square_model . $curly_model ;
 };
 
 # Now let's take care of the special cases. This one deals with "Driver"
