@@ -339,7 +339,7 @@ foreach my $ini_class (@ini_classes) {
 # instance, is not aware of these changes.
 my $rw_obj = Config::Model::Itself->new( 
     model_object => $meta_root,
-    model_dir => 'lib/Config/Model/models/',
+    cm_lib_dir => 'lib/Config/Model/',
     force_write => 1,
 );
 
