@@ -35,10 +35,5 @@ if ( $@ ) {
     exit ;
 }
 
-unless (my $return = do $script) {
-    warn "couldn't parse $script: $@" if $@;
-    warn "couldn't do $script: $!"    unless defined $return;
-    warn "couldn't run $script"       unless $return;
-}
-
+require $script;
 
