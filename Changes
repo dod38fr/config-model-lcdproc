@@ -1,5 +1,24 @@
 {{$NEXT}}
 
+2.043 2015-12-31
+
+  Bug fix release to cope with a change on Config::Model::Iself.
+  The scripts used to generate lcdproc model will now complain in case of
+  issue:
+    * gen_LCDd_model: use new cm_lib_dir param (Debian #808853)
+    * require Config::Model::Itself >= 2.001
+    * Build.PL: exit 1 when model generation fails
+    * gen_LCDd_model: exit 1 when model generation fails
+
+  The model generator changes are:
+    * specs specified between {...} can override specs specified between [...].
+      New syntax : {% and %}
+    * specify value type in all cases
+    * handle specs between [ and ] that span several lines
+
+  In case of issue, please now use github bug tracker:
+  https://github.com/dod38fr/config-model-lcdproc/issues
+
 2.042 2014-05-25
 
     The lcdproc model of this release is made for ldcproc 0.5.7. Only a very
