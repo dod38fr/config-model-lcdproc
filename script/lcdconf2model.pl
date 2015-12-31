@@ -99,7 +99,7 @@ my $dummy = $model->instance(
 )-> config_root;
 
 # read LCDd.conf
-my $lcd_file = IO::File->new('examples/lcdproc/LCDd.conf');
+my $lcd_file = IO::File->new('lcdproc/LCDd.conf');
 my @lines    = $lcd_file->getlines;
 
 # Here's the LCDd.conf pre-processing mentioned above

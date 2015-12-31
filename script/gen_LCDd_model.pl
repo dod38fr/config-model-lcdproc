@@ -25,7 +25,7 @@ use strict;
 
 my $target = "lib/Config/Model/models/LCDd.pl";
 my $script = "script/lcdconf2model.pl";
-my $source = "examples/lcdproc/LCDd.conf" ;
+my $source = "lcdproc/LCDd.conf" ;
 
 exit if -e $target and -M $target < -M $script and -M $target < -M $source ;
 
