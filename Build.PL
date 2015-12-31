@@ -17,8 +17,10 @@ my $class = Module::Build->subclass(
 sub ACTION_build {
     my $self = shift;
     # below requires Config::Model 2.026
-    system ($^X, qw!script/gen_LCDd_model.pl!) ;
-    system ($^X, qw!-S cme gen-class-pod!) ;
+    system ($^X, qw!script/gen_LCDd_model.pl!) == 0
+                    or die "gen_LCDd_model failed: $?" ;
+    system ($^X, qw!-S cme gen-class-pod!)  == 0
+                    or die "cme gen-class-pod failed: $?";
     $self->SUPER::ACTION_build;
 }
 SUBCLASS
