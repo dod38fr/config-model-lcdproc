@@ -16,11 +16,12 @@ my $class = Module::Build->subclass(
 
 sub ACTION_build {
     my $self = shift;
-    # below requires Config::Model 2.026
+    # regenerate LCDd model (requires Config::Model 2.026)
     system ($^X, qw!script/gen_LCDd_model.pl!) == 0
                     or die "gen_LCDd_model failed: $?" ;
-    system ($^X, qw!-S cme gen-class-pod!)  == 0
-                    or die "cme gen-class-pod failed: $?";
+    # regenerate pod documentation for the model generated above
+    system ($^X, '-MConfig::Model::Utils::GenClassPod', '-e','gen_class_pod();') == 0
+                    or die "gen-class-pod failed: $?";
     $self->SUPER::ACTION_build;
 }
 SUBCLASS
