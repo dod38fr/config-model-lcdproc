@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+2.044 2016-01-02
+
+  * Fix pod documentation re-generation which broke smoke tests on solaris.
+
 2.043 2015-12-31
 
   Bug fix release to cope with a change on Config::Model::Iself.
