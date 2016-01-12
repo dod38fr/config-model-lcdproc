@@ -24,7 +24,7 @@ use warnings;
 #    user documentation
 # 3/ Write the resulting LCDd model
 
-use Config::Model;
+use Config::Model 2.076;
 use Config::Model::Itself 2.001;    # to create the model
 use Config::Model::Backend::IniFile;
 
@@ -222,7 +222,7 @@ $dispatch{_default_} = sub {
 # parameter found in INI [server] class
 $dispatch{"LCDd::server"}{Driver} = sub {
     my ( $class, $elt, $info_r, $ini_v ) = @_;
-    my $load = qq!class:"$class" element:$elt type=leaf value_type=enum !;
+    my $load = qq!class:"$class" element:$elt type=check_list !;
     my @drivers = split /\W+/, $$info_r;
     while ( @drivers and ( shift @drivers ) !~ /supported/ ) { }
     $load .= 'choice=' . join( ',', @drivers ) . ' ';
@@ -321,7 +321,7 @@ foreach my $ini_class (@ini_classes) {
             config_class_name="LCDd::$ini_class"
             level=hidden
             follow:selected="- server Driver"
-            rules:"\$selected eq '$ini_class'" 
+            rules:"\$selected.is_set('$ini_class')"
                 level=normal
         !;
     }
