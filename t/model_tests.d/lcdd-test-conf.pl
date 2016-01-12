@@ -34,7 +34,18 @@ push @fix_warnings,
         name => 'LDCd-0.5.6',
         load_check => 'skip'
     },
-    
+    {
+        name => 'with-2-drivers',
+        check => {
+            'server Hello:0',           qq!"  Bienvenue"! ,
+            'server Hello:1',           qq("   LCDproc et Config::Model!") ,
+            'server Driver', 'curses,lirc',
+            'curses Size', '20x2',
+            'server AutoRotate', 'off',
+            'lirc prog','lcdd',
+        },
+        @fix_warnings ,
+    },
 );
 
 1;
