@@ -1,5 +1,11 @@
 {{$NEXT}}
 
+2.045 2016-01-24
+
+  This release fix a limitation of "cme edit lcdproc". User can now
+  enable more than one driver (i.e. set lirc and imonlcd drivers)
+  (this requires Config::Model 2.076)
+
 2.044 2016-01-02
 
   * Fix pod documentation re-generation which broke smoke tests on solaris.
