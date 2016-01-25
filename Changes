@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+2.046 2016-01-25
+
+  Fix dist.ini to update Config::Model dependency correctly
+  (i.e. >= v 2.076)
+
 2.045 2016-01-24
 
   This release fix a limitation of "cme edit lcdproc". User can now
