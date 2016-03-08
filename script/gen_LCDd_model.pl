@@ -19,7 +19,7 @@
 #    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 #    02110-1301 USA
 
-use warnings FATAL => qw(all);
+use warnings;
 use lib qw/lib/ ;
 use strict;
 

@@ -1,7 +1,7 @@
 
 use Module::Build;
 
-use warnings FATAL => qw(all);
+use warnings;
 use strict;
 
 require 5.010001 ;
