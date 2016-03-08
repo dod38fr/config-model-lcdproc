@@ -33,11 +33,6 @@ use IO::File;
 use IO::String;
 use Getopt::Long;
 
-# initialise logs for Config;:Model
-use Log::Log4perl qw(:easy);
-my $log4perl_user_conf_file = $ENV{HOME} . '/.log4config-model';
-Log::Log4perl::init($log4perl_user_conf_file);
-
 say "Building lcdproc model from upstream LCDd.conf file..." ;
 
 my $verbose = 0;
