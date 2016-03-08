@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+2.047 2016-03-08
+
+  Bug fix: let Config::Model initialise log4perl during model
+  generation to avoid failure when ~/.log4configmodel does not exist
+
 2.046 2016-01-25
 
   Fix dist.ini to update Config::Model dependency correctly
