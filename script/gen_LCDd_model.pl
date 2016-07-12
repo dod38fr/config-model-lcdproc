@@ -19,9 +19,15 @@
 #    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 #    02110-1301 USA
 
+# The goal of this file is to check whether generating lcdproc model
+# is necessary. This check could be done in lcdconf2model, but this
+# file is used as example in my blog so I prefer to keep it focused on
+# model generation
+
 use warnings;
 use lib qw/lib/ ;
 use strict;
+use 5.10.1;
 
 my $target = "lib/Config/Model/models/LCDd.pl";
 my $script = "script/lcdconf2model.pl";
@@ -31,9 +37,13 @@ exit if -e $target and -M $target < -M $script and -M $target < -M $source ;
 
 eval { require Config::Model::Itself ;} ;
 if ( $@ ) {
-    print "Config::Model::Itself is not available, skipping LCDd model generation\n";
+    say "Config::Model::Itself is not available, skipping LCDd model generation";
     exit ;
 }
 
-require $script;
+# cannot use "do" or "require": in case of error in lcdconf2model, we
+# get a misleading error message. see
+# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=830403
+say "Executing $script";
+exec( $script );
 
