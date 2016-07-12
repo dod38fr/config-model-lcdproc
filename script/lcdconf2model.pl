@@ -25,7 +25,7 @@ use warnings;
 # 3/ Write the resulting LCDd model
 
 use Config::Model 2.076;
-use Config::Model::Itself 2.001;    # to create the model
+use Config::Model::Itself 2.005;    # to create the model
 use Config::Model::Backend::IniFile;
 
 use 5.010;
@@ -315,8 +315,9 @@ foreach my $ini_class (@ini_classes) {
             type=warped_node 
             config_class_name="LCDd::$ini_class"
             level=hidden
-            follow:selected="- server Driver"
-            rules:"\$selected.is_set('$ini_class')"
+            warp
+              follow:selected="- server Driver"
+              rules:"\$selected.is_set('$ini_class')"
                 level=normal
         !;
     }
