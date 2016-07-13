@@ -1,5 +1,15 @@
 {{$NEXT}}
 
+2.048 2016-07-13
+
+  Usability improvements:
+    * added CONTRIBUTING.md
+    * gen_LCDd_model: use exec instead of require to get correct
+      error message when model generation fails
+
+  Bug fix:
+    * adapted model generation to new warp parameter (Debian #829442)
+
 2.047 2016-03-08
 
   Bug fix: let Config::Model initialise log4perl during model
