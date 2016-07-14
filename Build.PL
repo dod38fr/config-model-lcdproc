@@ -17,8 +17,8 @@ my $class = Module::Build->subclass(
 sub ACTION_build {
     my $self = shift;
     # regenerate LCDd model (requires Config::Model 2.026)
-    system ($^X, qw!script/gen_LCDd_model.pl!) == 0
-                    or die "gen_LCDd_model failed: $?" ;
+    system ($^X, qw!script/lcdconf2model.pl!) == 0
+                    or die "lcdconf2model failed: $?" ;
     # regenerate pod documentation for the model generated above
     system ($^X, '-MConfig::Model::Utils::GenClassPod', '-e','gen_class_pod();') == 0
                     or die "gen-class-pod failed: $?";

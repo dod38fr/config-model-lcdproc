@@ -21,12 +21,13 @@ use warnings;
 # parameters.  See below for this processing.
 
 # This script performs the following tasks:
-# 1/ pre-process LCDd.conf template
-# 2/ parse the new LCDd.conf template
-# 3/ mine the information there and translate them in a format suitable to create
+# 1/ check whether generating the model is necessary (or possible)
+# 2/ pre-process LCDd.conf template
+# 3/ parse the new LCDd.conf template
+# 4/ mine the information there and translate them in a format suitable to create
 #    a model. Comments are used to provide default and legal values and also to provide
 #    user documentation
-# 4/ Write the resulting LCDd model
+# 5/ Write the resulting LCDd model
 
 use Config::Model 2.076;
 use Config::Model::Itself 2.005;    # to create the model
@@ -35,20 +36,35 @@ use 5.010;
 use Path::Tiny;
 use Getopt::Long;
 
-say "Building lcdproc model from upstream LCDd.conf file..." ;
-
 my $verbose = 0;
 my $show_model = 0;
+my $force = 0;
 my $result = GetOptions (
     "verbose"  => \$verbose,
-    "model" => \$show_model
+    "model" => \$show_model,
+    "force" => \$force,
 );
 
 die "Unknown option. Expected -verbose or -show_model" unless $result ;
 
+########################
+#
+# Step 1: Check whether generating lcdproc model is necessary.
+
+my $target = "lib/Config/Model/models/LCDd.pl";
+my $script = "script/lcdconf2model.pl";
+my $source = "lcdproc/LCDd.conf" ;
+
+if (-e $target and -M $target < -M $script and -M $target < -M $source) {
+    say "LcdProc model is up to date";
+    exit unless $force;
+}
+
+say "Building lcdproc model from upstream LCDd.conf file..." ;
+
 ###########################
 #
-# Step 1: pre-process LCDd.conf (INI file)
+# Step 2: pre-process LCDd.conf (INI file)
 
 # Here's the LCDd.conf pre-processing mentioned above
 
@@ -68,7 +84,7 @@ $tmp->child('LCDd.conf')->spew(@lines);
 
 ###########################
 #
-# Step 2: parse LCDd.conf (INI file)
+# Step 3: parse LCDd.conf (INI file)
 
 # Problem: comments must also be retrieved and associated with INI
 # class and parameters
@@ -135,7 +151,7 @@ my $dummy = $model->instance(
 
 ##############################################
 #
-# Step 3: Mine the LCDd.conf information and create a model
+# Step 4: Mine the LCDd.conf information and create a model
 #
 
 # Create a meta tree that will contain LCDd model
@@ -348,7 +364,7 @@ foreach my $ini_class (@ini_classes) {
 
 ######################
 #
-# Step 4: write the model
+# Step 5: write the model
 
 
 # Itself constructor returns an object to read or write the data
@@ -363,6 +379,9 @@ my $rw_obj = Config::Model::Itself->new(
 
 say "Writing all models in file (please wait)";
 $rw_obj->write_all;
+
+# mop up
+$tmp->remove_tree;
 
 say "Done";
 
