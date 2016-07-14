@@ -15,42 +15,60 @@ use warnings;
 # All drivers are listed, most parameters have default values and
 # legal values written in comments in a uniform way. Hence this file
 # (and comments) can be parsed to retrieve the information required to
-# create a consistent model for LcdProc configuration.
+# create a consistent model for LcdProc configuration. Some useful
+# parameters are commented out in LCD.conf. So some processing is
+# required to be able to create a model with these commented
+# parameters.  See below for this processing.
 
-# This script performs 3 tasks:
-# 1/ parse LCDd.conf template
-# 2/ mine the information there and translate them in a format suitable to create
+# This script performs the following tasks:
+# 1/ pre-process LCDd.conf template
+# 2/ parse the new LCDd.conf template
+# 3/ mine the information there and translate them in a format suitable to create
 #    a model. Comments are used to provide default and legal values and also to provide
 #    user documentation
-# 3/ Write the resulting LCDd model
+# 4/ Write the resulting LCDd model
 
 use Config::Model 2.076;
 use Config::Model::Itself 2.005;    # to create the model
-use Config::Model::Backend::IniFile;
 
 use 5.010;
-use IO::File;
-use IO::String;
+use Path::Tiny;
 use Getopt::Long;
 
 say "Building lcdproc model from upstream LCDd.conf file..." ;
 
 my $verbose = 0;
 my $show_model = 0;
-my $result = GetOptions ("verbose"  => \$verbose,
-    "model" => \$show_model);
+my $result = GetOptions (
+    "verbose"  => \$verbose,
+    "model" => \$show_model
+);
 
 die "Unknown option. Expected -verbose or -show_model" unless $result ;
 
-# Dump stack trace in case of error
-Config::Model::Exception::Any->Trace(1) ;
+###########################
+#
+# Step 1: pre-process LCDd.conf (INI file)
 
-# one model to rule them all
-my $model = Config::Model->new();
+# Here's the LCDd.conf pre-processing mentioned above
+
+# read LCDd.conf
+my $path = path('.');
+my @lines    = $path->child('lcdproc/LCDd.conf')->lines;
+
+# un-comment commented parameters and put value as default value
+foreach my $line (@lines) {
+    $line =~ s/^#(\w+)=(.*)/# [default: $2]\n$1=$2/;
+}
+
+# write pre-processed files
+my $tmp = $path->child('tmp');
+$tmp->mkpath;
+$tmp->child('LCDd.conf')->spew(@lines);
 
 ###########################
 #
-# Step 1: parse LCDd.conf (INI file)
+# Step 2: parse LCDd.conf (INI file)
 
 # Problem: comments must also be retrieved and associated with INI
 # class and parameters
@@ -61,6 +79,20 @@ my $model = Config::Model->new();
 # On the other hand, Config::Model::Backend::IniFile must store its
 # values in a configuration tree. A model suitable for LCDd.conf that
 # accepts any INI class and any INI parameter must be created
+
+# Dump stack trace in case of error
+Config::Model::Exception::Any->Trace(1) ;
+
+# one model to rule them all
+my $model = Config::Model->new();
+
+# The model for pre-precessed LCDd.conf must be made of 2 classes:
+# - the main config class that contains INI class names (named Dummy here)
+# - the child class that contains data from a elements of the INI
+#   classes (named Dummy::Class)
+
+# For techinical reason, the lower class (Dummy::Class) must be
+# created first.
 
 # The class is used to store any parameter found in an INI class
 $model->create_config_class(
@@ -77,13 +109,7 @@ $model->create_config_class(
     ],
 );
 
-# Store any INI class, and use Dummy::Class to hold parameters.
-
-# Note that a INI backend could be created here. But, some useful
-# parameters are commented out in LCD.conf. So some processing is
-# required to be able to create a model with these commented parameters.
-# See below for this processing.
-
+# This class contains any INI class, and use Dummy::Class to hold parameters.
 $model->create_config_class(
     name   => 'Dummy',
     accept => [
@@ -92,6 +118,11 @@ $model->create_config_class(
             config_class_name => 'Dummy::Class'
         }
     ],
+    read_config => [{
+        backend => 'IniFile',
+        config_dir => 'tmp', # created above
+        file => 'LCDd.conf'
+    }]
 );
 
 # Now the dummy configuration class is created. Let's create a
@@ -102,29 +133,9 @@ my $dummy = $model->instance(
     root_class_name => 'Dummy',
 )-> config_root;
 
-# read LCDd.conf
-my $lcd_file = IO::File->new('lcdproc/LCDd.conf');
-my @lines    = $lcd_file->getlines;
-
-# Here's the LCDd.conf pre-processing mentioned above
-
-# un-comment commented parameters and put value as default value
-foreach (@lines) { s/^#(\w+)=(.*)/# [default: $2]\n$1=$2/ }
-
-# pre-processing is done.
-
-# store the munged LCDd.conf in a IO::Handle usable by INI backend
-my $ioh = IO::String->new( join( '', @lines ) );
-
-# Create the INI backend
-my $ini_backend = Config::Model::Backend::IniFile->new( node => $dummy );
-
-# feed the munged LCDd.conf content into INI backend
-$ini_backend->read( io_handle => $ioh );
-
 ##############################################
 #
-# Step 2: Mine the LCDd.conf information and create a model
+# Step 3: Mine the LCDd.conf information and create a model
 #
 
 # Create a meta tree that will contain LCDd model
@@ -164,8 +175,8 @@ $meta_root->load( qq!
 !
 );
 
-# Note: all the load calls above could be done as one call. But I choose
-#       to split them for better clarity
+# Note: all the load calls above could be done in one call. They are
+# split in several class to clarify what's going on.
 
 
 # This array contains all INI classes found in LCDd.conf,
@@ -340,7 +351,7 @@ foreach my $ini_class (@ini_classes) {
 
 ######################
 #
-# Step3: write the model
+# Step 4: write the model
 
 
 # Itself constructor returns an object to read or write the data
