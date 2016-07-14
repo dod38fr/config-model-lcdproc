@@ -56,24 +56,28 @@ my $model = Config::Model->new();
 # class and parameters
 
 # Fortunately, Config::Model::Backend::IniFile can already perform this
-# task. But Config::Model::Backend::IniFile must store its values in a
-# configuration tree.
+# task.
 
-# So let's create a model suitable for LCDd.conf that accepts any
-# INI class and any INI parameter
+# On the other hand, Config::Model::Backend::IniFile must store its
+# values in a configuration tree. A model suitable for LCDd.conf that
+# accepts any INI class and any INI parameter must be created
 
 # The class is used to store any parameter found in an INI class
 $model->create_config_class(
     name   => 'Dummy::Class',
     accept => [
-        'Hello|GoodBye' => { type => 'list',
+        'Hello|GoodBye' => {
+            type => 'list',
             cargo => { qw/type  leaf value_type uniline/}
         },
-        '.*' => {qw/type leaf value_type uniline/},
+        '.*' => {
+            type => 'leaf',
+            value_type => 'uniline'
+        }
     ],
 );
 
-# Store any INI class, and use Dummy::Class to hold parameters. 
+# Store any INI class, and use Dummy::Class to hold parameters.
 
 # Note that a INI backend could be created here. But, some useful
 # parameters are commented out in LCD.conf. So some processing is
@@ -82,10 +86,15 @@ $model->create_config_class(
 
 $model->create_config_class(
     name   => 'Dummy',
-    accept => [ '.*' => {qw/type node config_class_name Dummy::Class/}, ],
+    accept => [
+        '.*' => {
+            type => 'node',
+            config_class_name => 'Dummy::Class'
+        }
+    ],
 );
 
-# Now the dummy configuration class is created. Let's create a 
+# Now the dummy configuration class is created. Let's create a
 # configuration tree to store the data from LCDd.conf
 
 my $dummy = $model->instance(
@@ -138,7 +147,7 @@ $meta_root->load(qq!class:LCDd class_description.="\n\n$extra_description"!);
 
 # add legal stuff
 $meta_root->load( qq!
-    class:LCDd 
+    class:LCDd
         copyright:0="2011-2013, Dominique Dumont"
         copyright:1="1999-2013, William Ferrell and others"
         license="GPL-2"
@@ -147,10 +156,10 @@ $meta_root->load( qq!
 
 # add INI backend (So LCDd model will be able to read INI files)
 $meta_root->load( qq!
-    class:LCDd 
-        read_config:0 
-            backend=ini_file 
-            config_dir="/etc" 
+    class:LCDd
+        read_config:0
+            backend=ini_file
+            config_dir="/etc"
             file="LCDd.conf"
 !
 );
@@ -171,7 +180,7 @@ my %dispatch;
 # first create the default case which will be used for most parameters
 # This subs is passed: the INI class name, the INI parameter name
 # the comment attached to the parameter, the INI value, and an optional
-# value type  
+# value type
 $dispatch{_default_} = sub {
     my ( $ini_class, $ini_param, $info_r, $ini_v, $value_type ) = @_;
 
@@ -181,7 +190,7 @@ $dispatch{_default_} = sub {
 
     # get semantic information from comment (written between square brackets)
     my $square_model = '';
-    
+
     my $square_rexp = '\[(\s*\w+\s*:[^\]]*)\]';
     if ($$info_r =~ /$square_rexp/s) {
         my $info = $1 ;
@@ -189,7 +198,7 @@ $dispatch{_default_} = sub {
         $$info_r =~ s/$square_rexp//gs; # remove all remaining square_rexp
         $square_model .= ' '. info_to_model($info,$value_type, $info_r) ;
     }
-    
+
     unless ($square_model) {
         # or use the value found in INI file as default
         $ini_v =~ s/^"//g;
@@ -207,7 +216,7 @@ $dispatch{_default_} = sub {
             if $verbose;
         $$info_r =~ s/$curly_rexp//s;
     }
-    
+
     # return a string containing model specifications
     # spec in curly model may override spec in square model
     return $load . $square_model . $curly_model ;
@@ -232,22 +241,27 @@ $dispatch{"LCDd::server"}{DriverPath} = sub {
 };
 
 # like default but ensure that parameter is integer
-$dispatch{"LCDd::server"}{WaitTime} = $dispatch{"LCDd::server"}{ReportLevel} =
- $dispatch{"LCDd::picolcd"}{LircFlushThreshold} = $dispatch{"LCDd::server"}{Port}   = sub {
-    my ( $class, $elt, $info_r, $ini_v ) = @_;
-    return $dispatch{_default_}->( @_, 'integer' );
-  };
+$dispatch{"LCDd::server"}{WaitTime}
+    = $dispatch{"LCDd::server"}{ReportLevel}
+    = $dispatch{"LCDd::picolcd"}{LircFlushThreshold}
+    = $dispatch{"LCDd::server"}{Port}
+    = sub {
+        my ( $class, $elt, $info_r, $ini_v ) = @_;
+        return $dispatch{_default_}->( @_, 'integer' );
+    };
 
 # special dispatch case
 my %override ;
 
 # Handle display content
-$override{"LCDd::server"}{GoodBye} = $override{"LCDd::server"}{Hello} = sub {
-    my ( $class, $elt ) = @_;
-    my $ret = qq( class:"$class" element:$elt type=list ) ;
-    $ret .= 'cargo type=leaf value_type=uniline';
-    return $ret ;
-};
+$override{"LCDd::server"}{GoodBye}
+    = $override{"LCDd::server"}{Hello}
+    = sub {
+        my ( $class, $elt ) = @_;
+        my $ret = qq( class:"$class" element:$elt type=list ) ;
+        $ret .= 'cargo type=leaf value_type=uniline';
+        return $ret ;
+    };
 
 # Now really mine LCDd.conf information
 
@@ -298,21 +312,21 @@ foreach my $ini_class (@ini_classes) {
     # Now create a an $ini_class element in LCDd class (to link LCDd
     # class and LCDd::$ini_class)
     my $driver_class_spec = qq!
-        class:LCDd 
-            element:$ini_class 
+        class:LCDd
+            element:$ini_class
     ! ;
 
     if ( $ini_class eq 'server' or $ini_class eq 'menu' ) {
-        $driver_class_spec .= qq! 
-            type=node 
-            config_class_name="LCDd::$ini_class" 
+        $driver_class_spec .= qq!
+            type=node
+            config_class_name="LCDd::$ini_class"
         ! ;
     }
     else {
         # Arrange a driver class is shown only if the driver was selected
         # in the [server] class
-        $driver_class_spec .= qq! 
-            type=warped_node 
+        $driver_class_spec .= qq!
+            type=warped_node
             config_class_name="LCDd::$ini_class"
             level=hidden
             warp
@@ -326,14 +340,14 @@ foreach my $ini_class (@ini_classes) {
 
 ######################
 #
-# Step3: write the model 
+# Step3: write the model
 
 
 # Itself constructor returns an object to read or write the data
 # structure containing the model to be edited. force_write is required
 # because writer object, being created *after* loading the model in the
 # instance, is not aware of these changes.
-my $rw_obj = Config::Model::Itself->new( 
+my $rw_obj = Config::Model::Itself->new(
     model_object => $meta_root,
     cm_lib_dir => 'lib/Config/Model/',
     force_write => 1,
@@ -352,7 +366,7 @@ sub info_to_model {
     my @model ;
 
     # legal needs to be parsed first to setup value_type first
-    my %info = map { split /[:=]/,$_ ,2 ; } split /;/,$info ; 
+    my %info = map { split /[:=]/,$_ ,2 ; } split /;/,$info ;
 
     # use this semantic information to better specify the parameter
     if (my $legal = delete $info{legal} || '') {
