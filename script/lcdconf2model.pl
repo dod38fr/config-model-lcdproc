@@ -174,8 +174,9 @@ $meta_root->load( qq!
 # Note: all the load calls above could be done in one call. They are
 # split in several class to clarify what's going on.
 
-
-# This array contains all INI classes found in LCDd.conf,
+# Now, let's use the information retrieved by /etc/LCDd.conf
+# and stored in Dummy tree.
+# @ini_classes array contains all INI classes found in LCDd.conf,
 # make sure to put server in first, and sort the rest
 my @ini_classes = sort grep { $_ ne 'server'} $dummy->get_element_name;
 unshift @ini_classes, 'server' ;
@@ -242,12 +243,12 @@ $dispatch{"LCDd::server"}{Driver} = sub {
     return $load;
 };
 
-# Ensure that DriverPath will end with a slash
+# Ensure that DriverPath ends with a slash by adding a match clause
 $dispatch{"LCDd::server"}{DriverPath} = sub {
     return $dispatch{_default_}->( @_ ) . q! match="/$"! ;
 };
 
-# like default but ensure that parameter is integer
+# like default but ensure that the parameter is integer
 $dispatch{"LCDd::server"}{WaitTime}
     = $dispatch{"LCDd::server"}{ReportLevel}
     = $dispatch{"LCDd::picolcd"}{LircFlushThreshold}
@@ -270,7 +271,7 @@ $override{"LCDd::server"}{GoodBye}
         return $ret ;
     };
 
-# Now really mine LCDd.conf information
+# Now really mine LCDd.conf information using Dummy tree
 
 # loop over all INI classes
 foreach my $ini_class (@ini_classes) {
