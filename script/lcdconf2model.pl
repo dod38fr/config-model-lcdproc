@@ -149,11 +149,7 @@ my $meta_root = $model->instance(
 $meta_root->grab("class:LCDd class_description")->store( $dummy->annotation );
 
 # append my own text
-my $extra_description =
-    "Model information extracted from template /etc/LCDd.conf"
-  . "\n\n=head1 BUGS\n\nThis model does not support to load several drivers. Loading "
-  . "several drivers is probably a marginal case. Please complain to the author if this "
-  . "assumption is false";
+my $extra_description = "Model information was extracted from /etc/LCDd.conf";
 $meta_root->load(qq!class:LCDd class_description.="\n\n$extra_description"!);
 
 # add legal stuff
