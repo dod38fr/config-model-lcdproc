@@ -1,5 +1,11 @@
 {{$NEXT}}
 
+2.049 2016-07-15
+
+    * merge gen_LCDd_model in lcdconf2model (gh #1)
+    * update © years of generated model
+    * remove obsolete text in description
+
 2.048 2016-07-13
 
   Usability improvements:
