@@ -415,11 +415,11 @@ sub info_to_model {
             push @model, "value_type=enum choice=$1"
         }
         else{
+            # push back $legal info if no model snippet could be extracted
             say "note: unhandled legal  spec: '$legal'. Sending it back to doc";
             push @model, "value_type=$value_type ";
             $$info_r .= "legal: $legal "
         }
-        # push back $legal info if no model snippet could be extracted
     }
     else {
         push @model, "value_type=$value_type ";
