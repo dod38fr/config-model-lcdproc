@@ -399,8 +399,8 @@ sub info_to_model {
     if (my $legal = delete $info{legal} || '') {
         if ( $legal =~ /^([\d.]*)-([\d.]*)$/ or $legal =~ /^>([\d.]+)$/ ) {
             my $bounds = '';
-            $bounds.= "min=$1 " if defined $1;
-            $bounds.= "max=$2 " if defined $2;
+            $bounds.= "min=$1 " if defined $1 and length($1);
+            $bounds.= "max=$2 " if defined $2 and length($2);
             my $vt = "value_type=";
             $vt .= $bounds =~ m/\./ ? 'number ' : 'integer ';
             push @model, $vt.$bounds;
