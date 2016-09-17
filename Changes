@@ -1,5 +1,12 @@
 {{$NEXT}}
 
+2.050 2016-09-17
+
+  Bug fix:
+    * model generator: fix call to load (gh #2).
+      (Thanks Slaven Rezić)
+    * fix doc typo in LCDd.conf
+
 2.049 2016-07-15
 
     * merge gen_LCDd_model in lcdconf2model (gh #1)
