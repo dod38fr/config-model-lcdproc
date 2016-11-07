@@ -116,7 +116,7 @@ my $model = Config::Model->new();
 $model->create_config_class(
     name   => 'Dummy::Class',
     accept => [
-        'Hello|GoodBye' => {
+        'Hello|GoodBye|key' => {
             type => 'list',
             cargo => { qw/type  leaf value_type uniline/}
         },
@@ -282,6 +282,7 @@ my %override ;
 # Handle display content
 $override{"LCDd::server"}{GoodBye}
     = $override{"LCDd::server"}{Hello}
+    = $override{"LCDd::linux_input"}{key}
     = sub {
         my ( $class, $elt ) = @_;
         my $ret = qq( class:"$class" element:$elt type=list ) ;
