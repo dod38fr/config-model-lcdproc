@@ -36,11 +36,12 @@ You can choose to  fix (most of) these warnings with the command:
 
 =head1 DESCRIPTION
 
-This module provides a configuration editor (and models) for the 
+This module provides a configuration editor (and models) for the
 configuration file of LcdProc, i.e. C</etc/LCDd.conf>.
 
 This module can also be used to modify safely the content of this file
-from a Perl programs.
+from a Perl programs. For more details, see
+L<Managing Lcdproc configuration with cme|https://github.com/dod38fr/config-model/wiki/Managing-Lcdproc-configuration-with-cme>
 
 =head1 SEE ALSO
 
@@ -61,6 +62,10 @@ L<Config::Model>
 =item *
 
 http://github.com/dod38fr/config-model/wiki/Using-config-model
+
+=item *
+
+L<Blog about config-model and lcdproc|https://ddumont.wordpress.com/tag/lcdproc/>
 
 =back
 
