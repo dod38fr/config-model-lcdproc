@@ -173,8 +173,8 @@ $meta_root->load(qq!class:LCDd class_description.="\n\n$extra_description"!);
 # add legal stuff
 $meta_root->load( qq!
     class:LCDd
-        copyright:0="2011-2016, Dominique Dumont"
-        copyright:1="1999-2013, William Ferrell and others"
+        copyright:0="2011-2017, Dominique Dumont"
+        copyright:1="1999-2017, William Ferrell and others"
         license="GPL-2"
 !
 );
