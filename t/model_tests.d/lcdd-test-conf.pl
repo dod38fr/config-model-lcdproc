@@ -1,7 +1,5 @@
-
-$conf_file_name = "LCDd.conf" ;
-$conf_dir = "etc" ;
-$model_to_test = "LCDd" ;
+use strict;
+use warnings;
 
 my @fix_warnings ;
 
@@ -12,9 +10,9 @@ push @fix_warnings,
     ) 
     unless -d '/usr/lib/lcdproc/' ;
 
-@tests = (
+my @tests = (
     { # t0
-     check => { 
+     check => {
        'server Hello:0',           qq!"  Bienvenue"! ,
        'server Hello:1',           qq("   LCDproc et Config::Model!") ,
        'server Driver', 'curses',
@@ -48,4 +46,11 @@ push @fix_warnings,
     },
 );
 
-1;
+return {
+    model_to_test => "LCDd" ,
+    conf_file_name => "LCDd.conf" ,
+    conf_dir => "etc" ,
+    tests => \@tests
+};
+
+
