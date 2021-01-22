@@ -29,8 +29,8 @@ use warnings;
 #    user documentation
 # 5/ Write the resulting LCDd model
 
-use Config::Model 2.111;
-use Config::Model::Itself 2.012;    # to create the model
+use Config::Model 2.141;
+use Config::Model::Itself 2.022;    # to create the model
 
 use 5.010;
 use Path::Tiny;
