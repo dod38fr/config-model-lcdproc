@@ -186,6 +186,7 @@ $meta_root->load( qq!
             backend=ini_file
             config_dir="/etc"
             file="LCDd.conf"
+            quote_value=shell_style
 !
 );
 
