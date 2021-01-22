@@ -14,8 +14,8 @@ my @tests = (
     {
         # t0
         check => {
-            'server Hello:0',           qq!"  Bienvenue"! ,
-            'server Hello:1',           qq("   LCDproc et Config::Model!") ,
+            'server Hello:0',           qq!  Bienvenue! ,
+            'server Hello:1',           qq(   LCDproc et Config::Model!) ,
             'server Driver', 'curses',
             'curses Size', '20x2',
             'server AutoRotate', 'off',
@@ -24,6 +24,9 @@ my @tests = (
         errors => [
             # qr/value 2 > max limit 0/ => 'fs:"/var/chroot/lenny-i386/dev" fs_passno=0' ,
         ],
+        file_contents_like => {
+            "/etc/LCDd.conf" => qr!"  Bienvenue"!
+        }
     },
     {
         # test upgrade from raw lcdproc 0.5.5
@@ -38,8 +41,8 @@ my @tests = (
     {
         name => 'with-2-drivers',
         check => {
-            'server Hello:0',           qq!"  Bienvenue"! ,
-            'server Hello:1',           qq("   LCDproc et Config::Model!") ,
+            'server Hello:0',           qq!  Bienvenue! ,
+            'server Hello:1',           qq(   LCDproc et Config::Model!) ,
             'server Driver', 'curses,lirc',
             'curses Size', '20x2',
             'server AutoRotate', 'off',
