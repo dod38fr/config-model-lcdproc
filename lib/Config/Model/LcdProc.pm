@@ -2,7 +2,7 @@ package Config::Model::LcdProc;
 
 use 5.10.1;
 
-use Config::Model 2.111;
+use Config::Model 2.022;
 
 1;
 
