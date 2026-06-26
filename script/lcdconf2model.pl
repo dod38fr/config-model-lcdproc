@@ -109,7 +109,7 @@ my $model = Config::Model->new();
 # - the child class that contains data from a elements of the INI
 #   classes (named Dummy::Class)
 
-# For techinical reason, the lower class (Dummy::Class) must be
+# For technical reason, the lower class (Dummy::Class) must be
 # created first.
 
 # The class is used to store any parameter found in an INI class
