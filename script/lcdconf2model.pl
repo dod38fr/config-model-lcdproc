@@ -29,8 +29,8 @@ use warnings;
 #    user documentation
 # 5/ Write the resulting LCDd model
 
-use Config::Model 2.141;
-use Config::Model::Itself 2.022;    # to create the model
+use Config::Model 2.163;
+use Config::Model::Itself 2.031;    # to create the model
 
 use v5.20;
 use Path::Tiny;
@@ -357,8 +357,10 @@ foreach my $ini_class (@ini_classes) {
             level=hidden
             warp
               follow:selected="- server Driver"
-              rules:"\$selected.is_set('$ini_class')"
-                level=normal
+              rules:0
+                when="\$selected.is_set('$ini_class')"
+                apply
+                  level=normal
         !;
     }
     $meta_root->load($driver_class_spec);
